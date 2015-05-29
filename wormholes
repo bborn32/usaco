@@ -1,0 +1,138 @@
+ /*
+ID: brandon29
+PROG: wormhole
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class wormhole
+{ 
+    public static int isCycle(int[] n, int[] m, int p, int partner[], int[] onRight)
+    {
+        for (int j = 0; j < p; j++)
+        {
+            // Declare and initialize variable
+            int currPosition = j;
+            
+            // Move to next wormhole up to the number of wormholes times
+            for (int k = 0; k < p; k++)
+            {
+                if (currPosition == -1)
+                {
+                    currPosition = -1;
+                }
+                
+                else
+                {
+                    currPosition = onRight[partner[currPosition]];
+                }
+            }
+            
+            // Check if wormhole forms cycle
+            if (currPosition != -1)
+            {
+               return 1; 
+            }
+        }
+        return 0;
+    }
+    
+    public static int numCycles(int[] n, int[] m, int p, int partner[], int onRight[])
+    {
+        // Declare and initialize variables
+        int totalCycles = 0, j;
+        boolean allPaired = true;
+        
+        // Find unpaired wormhole
+        for (j = 0; j < p; j++)
+        {
+            if (partner[j] == -1)
+            {
+                break;
+            }
+        }    
+        
+        // Attempt to pair unpaired wormhole
+        for (int i = j + 1; i < p; i++)
+        {
+            if (partner[i] == -1)
+            {
+                partner[i] = j;
+                partner[j] = i;
+                totalCycles += numCycles(n,m,p,partner,onRight);
+                partner[i] = -1;
+                partner[j] = -1;
+            }   
+        }       
+        
+        // Check if all wormholes are paired
+        if (j == p)
+        {
+            if (isCycle(n,m,p,partner,onRight) == 1)
+            {
+                return 1;
+            }
+            
+            else
+            {
+                return 0;
+            }
+        }
+        
+        // Return final answer
+        return totalCycles; 
+    }
+    
+    
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("wormhole.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("wormhole.out")));        
+        
+        // Declare and initialize variables
+        int numWormholes = Integer.parseInt(in.readLine());
+        int[] xCoord = new int[12];
+        int[] yCoord = new int[12];
+        int[] partner = new int[12];
+        int[] wormholeToRight = new int[12];
+        for (int k = 0; k < 12; k++)
+        {
+          partner[k]--;
+          wormholeToRight[k]--;
+        }
+        
+        // Read in wormholes
+        for (int j = 0; j < numWormholes; j++)
+        {
+            String stringInput = in.readLine();
+            String splitInput[] = stringInput.split(" ");
+            xCoord[j] = Integer.parseInt(splitInput[0]);
+            yCoord[j] = Integer.parseInt(splitInput[1]);
+        }
+        
+        // Find wormhole to right for all wormholes
+        for (int j = 0; j < numWormholes; j++)
+        {
+            for (int k = 0; k < numWormholes; k++)
+            {
+                if (yCoord[k] == yCoord[j] && xCoord[k] > xCoord[j])
+                {
+                    if (wormholeToRight[j] == -1 || (xCoord[k] - xCoord[j] < xCoord[wormholeToRight[j]] - xCoord[j]))
+                    {
+                        wormholeToRight[j] = k;
+                    }
+                }
+            }
+        }
+        
+        // Call recursive function to output final answer
+        out.println(numCycles(xCoord, yCoord, numWormholes, partner, wormholeToRight));
+        
+        // Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
