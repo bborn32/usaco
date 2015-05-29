@@ -1,0 +1,144 @@
+/*
+ID: brandon29
+PROG: castle
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class castle
+{ 
+    // Declare and initialize variables
+    static int width;
+    static int height;
+    static int[][] areas = new int[50][50];
+    static int[][] rooms = new int[50][50];
+    static int roomNumber = 0;
+    
+    public static void roomNumberGen(int row, int column)
+    {
+        // Set current room to correct room
+        rooms[row][column] = roomNumber;        
+        
+        // Check which rooms aren't walled and adjacent
+        if (areas[row][column] % 2 == 0 && rooms[row][column - 1] != roomNumber)
+        {
+            roomNumberGen(row, column - 1);
+        }
+        if ((areas[row][column] % 4) / 2 != 1 && rooms[row - 1][column] != roomNumber)
+        {
+            roomNumberGen(row - 1, column);
+        }
+        if ((areas[row][column] % 8) / 4 != 1 && rooms[row][column + 1] != roomNumber)
+        {
+            roomNumberGen(row, column + 1);
+        }
+        if (areas[row][column] / 8 != 1 && rooms[row + 1][column] != roomNumber)
+        {
+            roomNumberGen(row + 1, column);
+        }        
+        
+        // Exit method
+        return;
+    }
+    
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("castle.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("castle.out")));
+        
+        // Read in width and height
+        String[] input = in.readLine().split(" ");
+        width = Integer.parseInt(input[0]);
+        height = Integer.parseInt(input[1]);
+        
+        // Read in walls
+        for (int j = 0; j < height; j++)
+        {
+            String[] wallPositions = in.readLine().split(" ");
+            for (int k = 0; k < width; k++)
+            {
+                areas[j][k] = Integer.parseInt(wallPositions[k]);               
+            }
+        }
+        
+        // Generate room numbers
+        for (int j = 0; j < height; j++)
+        {
+            for (int k = 0; k < width; k++)
+            {
+                if (rooms[j][k] == 0)
+                {
+                    roomNumber++;
+                    roomNumberGen(j , k);                    
+                }               
+            }            
+        }
+        
+        // Declare and initialize array of room sizes
+        ArrayList<Integer> roomAreas = new ArrayList();        
+        for (int j = 0; j <= roomNumber; j++)
+        {
+            roomAreas.add(0);
+        }
+        
+        // Calculate room sizes for each number
+        for (int j = 0; j < height; j++)
+        {
+            for (int k = 0; k < width; k++)
+            {
+                roomAreas.set(rooms[j][k], roomAreas.get(rooms[j][k]) + 1);
+            }           
+        }   
+        
+        // Find largest room
+        int largestRoom = 0;
+        for (int j = 0; j <= roomNumber; j++)
+        {
+            largestRoom = Math.max(largestRoom, roomAreas.get(j));
+        }
+        
+        // Output number of rooms and largest room area
+        out.println(roomNumber + "\n" + largestRoom);
+                
+        // Find largest possible room after removing a wall
+        int greatestBreak = 0;
+        String breakLocation = "";
+        for (int k = 0; k < width; k++)
+        {
+            for (int j = height - 1; j >= 0; j--)
+            {
+                // Check max room size made by destroying wall to the north
+                if (j != 0 && rooms[j - 1][k] != rooms[j][k])
+                {
+                    if (roomAreas.get(rooms[j][k]) + roomAreas.get(rooms[j - 1][k]) > greatestBreak)
+                    {
+                        // Set current break spot to answer
+                        greatestBreak = roomAreas.get(rooms[j][k]) + roomAreas.get(rooms[j - 1][k]);
+                        breakLocation = (j + 1) + " " + (k + 1) + " N";
+                    }
+                }
+                
+                // Check max room size made by destroying wall to the east
+                if (k != width - 1 && rooms[j][k + 1] != rooms[j][k])
+                {
+                    if (roomAreas.get(rooms[j][k]) + roomAreas.get(rooms[j][k + 1]) > greatestBreak)
+                    {
+                        // Set current break spot to answer
+                        greatestBreak = roomAreas.get(rooms[j][k]) + roomAreas.get(rooms[j][k + 1]);
+                        breakLocation = (j + 1) + " " + (k + 1) + " E";                        
+                    }                    
+                }                
+            }           
+        }
+        
+        // Output largest break answer
+        out.println(greatestBreak + "\n" + breakLocation);
+        
+        // Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
