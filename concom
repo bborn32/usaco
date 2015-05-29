@@ -1,0 +1,81 @@
+/*
+ID: brandon29
+PROG: concom
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class concom
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("concom.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("concom.out")));
+        
+        // Declare and initialize variables
+        int[][] control = new int[101][101];
+        boolean[][] controlled = new boolean[101][101];
+        
+        // Read in number of instructinos to process
+        int numInstructs = Integer.parseInt(in.readLine());
+        
+        // Read in all ownerships amongst companies
+        for (int j = 0; j < numInstructs; j++)
+        {
+            String[] input = in.readLine().split(" ");
+            control[Integer.parseInt(input[0])][Integer.parseInt(input[1])] += Integer.parseInt(input[2]);
+        }        
+        
+                
+        // Check every company
+        for (int j = 1; j <= 100; j++)
+        {
+            // Check ownership of each company
+            for (int k = 1; k <= 100; k++)
+            {
+                // Check to see if company j controls k, but hasn't been checked yet
+                if (!controlled[j][k] && j != k && control[j][k] > 50)
+                {
+                    // Note company j controls k, to avoid repetition
+                    controlled[j][k] = true;
+                    
+                    // Have company j control all that company k controls
+                    for (int l = 1; l <= 100; l++)
+                    {   
+                        // Have company j control company l if company k controls company l
+                        if (controlled[k][l])
+                        {
+                            controlled[j][l] = true;
+                        }
+                        
+                        // Account for any partial ownerships
+                        control[j][l] += control[k][l];     
+                    }
+                    
+                    // Reset counter to recheck values
+                    k = 0;
+                }               
+            }
+        }      
+          
+        // Print out all ownerships
+        for (int j = 1; j <= 100; j++)
+        {
+            for (int k = 1; k <= 100; k++)
+            {
+                // Insure there is ownership and that comapny doesn't control itself
+                if (controlled[j][k] && j != k)
+                {
+                    out.println(j + " " + k);
+                }
+            }
+        }
+        
+        // Exit the program
+        out.close();
+        System.exit(0);
+    }
+}
