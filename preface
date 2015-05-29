@@ -1,0 +1,77 @@
+/*
+ID: brandon29
+PROG: preface
+LANG: JAVA
+*/
+
+//           NAME       :      Brandon Born
+//          GROUP       :      APCS
+//  LAST MODIFIED       :      December 11, 2014
+//     PROBLEM ID       :      Preface Numbering
+//    DESCRIPTION       :      Calculates the amount of each 
+//                             roman numeral needed to tyoe
+//                             a given number of page numbers. 
+// SOURCES AND HELPERS  :      USACO, Mr. H, Lewis text, Java API
+
+import java.io.*;
+import java.util.*;
+
+public class preface
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("preface.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("preface.out")));
+        
+        // Declare and initialize variables
+        int limitNum = Integer.parseInt(in.readLine());
+        int[] numeralNums = new int[7];
+        
+        // Loop through all number through limit
+        for (int j = 1; j <= limitNum; j++)
+        {
+            // Convert to string
+            String digitString = Integer.toString(j);
+            
+            // Add numerals for each digit
+            for (int k = digitString.length(); k > 0; k--)
+            {
+                // Calculate last digit
+                int digit = Integer.parseInt(digitString.substring(k - 1, k));
+                
+                // Add appropriate numerals
+                if (digit == 1 || digit == 6 || digit == 2 || digit == 7 || digit == 8 || digit == 3)
+                {
+                    numeralNums[2 * (digitString.length() - k)] += digit % 5;
+                }            
+                if (digit == 4 || digit == 9)
+                {
+                    numeralNums[2 * (digitString.length() - k)]++;
+                }
+                if (digit > 3 && digit < 9)
+                {
+                    numeralNums[2 * (digitString.length() - k) + 1]++;
+                }
+                if (digit == 9)
+                {
+                    numeralNums[2 * ((digitString.length() - k) + 1)]++;
+                }
+            }            
+        }
+        
+        // Output final answer
+        String[] numerals = new String[] {"I ", "V ", "X ", "L ", "C ", "D ", "M "};        
+        for (int j = 0; j < 7; j++)
+        {
+            if (numeralNums[j] != 0)
+            {
+                out.println(numerals[j] + numeralNums[j]);
+            }
+        }
+        
+        // Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
