@@ -1,0 +1,77 @@
+/*
+ID: brandon29
+PROG: dualpal
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class dualpal
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("dualpal.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("dualpal.out")));
+        
+        // Declare and intialize variables
+    	int numSolns = 0, startNum, needNumSolns;
+    	int convNum, counter, numPals, currNum;
+    	String convOrigString = "";    	
+    
+    	// Read in variables
+        String input = in.readLine();
+        String splitInput[] = input.split(" ");
+        needNumSolns = Integer.parseInt(splitInput[0]);
+        startNum = Integer.parseInt(splitInput[1]);
+    
+        // Set number to start at
+    	currNum = startNum;
+    
+        // Run until needed number of solutions is found
+    	while (numSolns < needNumSolns)
+    	{
+    		// Reset variables
+            numPals = 0;
+    		currNum += 1;
+    		       
+    		for (int base = 2; base < 11; base++)
+    		{
+    			// Reset variables
+                counter = 0;
+    			convNum = currNum;
+    			convOrigString = "";
+    			    			
+                // Change base of the original number
+    			convOrigString = Integer.toString(currNum, base);
+    
+    			// Check to see if the number is palindromic
+    			for (int k = 0; k < convOrigString.length(); k++)
+    			{
+    				if (convOrigString.charAt(k)== convOrigString.charAt(convOrigString.length() - 1 - k))
+    				{
+    					counter += 1;
+    				}
+    			}
+    
+                // Add to number of palindromes this number forms
+    			if (counter == convOrigString.length())
+    			{
+    				numPals += 1;
+    			}
+    		}
+    		
+            // Output number if it is palindromic in more than one base
+            if (numPals > 1)
+    		{
+    			numSolns += 1;
+    			out.println(currNum);
+    		}
+    	}
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
