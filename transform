@@ -1,0 +1,211 @@
+/*
+ID: brandon29
+PROG: transform
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class transform
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("transform.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("transform.out")));
+        
+        int squareSize = Integer.parseInt(in.readLine());
+        int squareArea = squareSize * squareSize;
+        String figure[][] = new String[10][10];
+        String newFig[][] = new String[10][10];
+        int transformNum = 7;
+        int counter = 0;   
+        
+        // Read in original square
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            String row = in.readLine();
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                figure[rows][cols] = row.substring(cols, cols + 1);
+            }
+        }
+    
+        // Read in new square
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            String row = in.readLine();
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                newFig[rows][cols] = row.substring(cols, cols + 1);
+            }
+        }
+    
+        // Create a square that is a mirror image
+        String flippedFigure[][] = new String[10][10];
+    
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                flippedFigure[rows][cols] = figure[rows][squareSize - cols - 1];
+            }
+        }
+    
+        // Check for transformation #6
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                if (figure[rows][cols].equals(newFig[rows][cols]))
+                {
+                    counter += 1;
+                }
+            }
+        }
+        
+        if (counter == squareArea)
+        {
+            transformNum = 6;
+        }
+    
+        counter = 0;
+    
+        // Check for transformation #5
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                if (newFig[rows][cols].equals(flippedFigure[squareSize - cols - 1][rows]))
+                {
+                    counter += 1;
+                }
+            }
+        }        
+    
+        if (counter == squareArea)
+        {
+            transformNum = 5;
+        }
+    
+        counter = 0;
+    
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                if (newFig[rows][cols].equals(flippedFigure[squareSize - rows - 1][squareSize - cols - 1]))
+                {
+                    counter += 1;
+                }
+            }
+        }        
+        
+        if (counter == squareArea)
+        {
+            transformNum = 5;
+        }
+    
+        counter = 0;
+    
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                if (newFig[rows][cols].equals(flippedFigure[squareSize - rows - 1][squareSize - cols - 1]))
+                {
+                    counter += 1;
+                }
+            }
+        }
+        
+        if (counter == squareArea)
+        {
+            transformNum = 5;
+        }
+    
+        counter = 0;
+        
+        // Check for transformation #4
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                if (newFig[rows][cols].equals(flippedFigure[rows][cols]))
+                {
+                    counter += 1;
+                }
+            }
+        }
+    
+        if (counter == squareArea)
+        {
+            transformNum = 4;
+        }
+    
+        counter = 0;
+    
+        // Check for transformation #3
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                if (newFig[rows][cols] == figure[squareSize - cols - 1][rows])
+                {
+                    counter += 1;
+                }
+            }
+        }
+    
+        if (counter == squareArea)
+        {
+            transformNum = 3;
+        }
+        
+        counter = 0;
+        
+        // Check for transformation #2
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                if (newFig[rows][cols].equals(figure[squareSize - rows - 1][squareSize - cols - 1]))
+                {
+                    counter += 1;
+                }
+            }
+        }
+    
+        if (counter == squareArea)
+        {
+            transformNum = 2;
+        }
+        
+        counter = 0;
+    
+        // Check for transformation #1
+        for (int rows = 0; rows < squareSize; rows++)
+        {
+            for (int cols = 0; cols < squareSize; cols++)
+            {
+                if (newFig[rows][cols].equals(figure[cols][squareSize - rows - 1]))
+                {
+                    counter += 1;
+                }
+            }
+        }
+    
+        if (counter == squareArea)
+        {
+            transformNum = 1;
+        }
+    
+        // Output answer
+        out.println(transformNum);
+                
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
