@@ -1,0 +1,56 @@
+/*
+ID: brandon29
+PROG: sort3
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class sort3
+{   
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("sort3.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("sort3.out")));
+        
+        // Declare and initialize variables
+        int numSwaps, numRecords, currInt;
+        int[][] numbers = new int[][] {{0,0,0}, {0,0,0}, {0,0,0}};
+        int[] totalNums = new int[]{0,0,0};    
+        ArrayList<Integer> values = new ArrayList();
+        
+        // Read in USACO input
+        numRecords = Integer.parseInt(in.readLine());       
+        for (int j = 0; j < numRecords; j++)
+        {            
+            values.add(Integer.parseInt(in.readLine()));
+            totalNums[values.get(j) - 1]++;
+        }
+        
+        // Determine where numbers currently are
+        for (int j = 0; j < totalNums[0]; j++)
+        {
+            numbers[0][values.get(j) - 1]++;           
+        }        
+        for (int j = totalNums[0]; j < totalNums[1] + totalNums[0]; j++)
+        {
+            numbers[1][values.get(j) - 1]++;            
+        }         
+        for (int j = totalNums[1] + totalNums[0]; j < numRecords; j++)
+        {
+            numbers[2][values.get(j) - 1]++;            
+        } 
+        
+        // Calculate needed number of swaps       
+        numSwaps = Math.max(numbers[0][1], numbers[1][0]) + Math.max(numbers[0][2], numbers[2][0]) + Math.max(numbers[1][2], numbers[2][1]) - Math.max(Math.abs(numbers[0][1] - numbers[1][0]), Math.max(Math.abs(numbers[0][2] - numbers[2][0]), Math.abs(numbers[2][1] - numbers[1][2])));               
+        
+        // Output final answer
+        out.println(numSwaps);
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
