@@ -1,0 +1,62 @@
+/*
+ID: brandon29
+PROG: palsquare
+LANG: JAVA
+*/
+
+//           NAME       :      Brandon Born
+//          GROUP       :      APCS
+//  LAST MODIFIED       :      11-19-14
+//     PROBLEM ID       :      Palindromic Squares
+//    DESCRIPTION       :      For a specified base, outputs all numbers
+//                             less than 301 whose squares are palindromic
+//                             in the specified base.
+//Sources and Helpers   :      USACO, Mr. H, Lewis text, Java API
+
+import java.io.*;
+import java.util.*;
+
+public class palsquare
+{ 
+    // Check if given string is a palindrome
+    public static boolean isPal(String palCheck)
+    {
+        // Make specified word into a string buffer  
+        StringBuffer wordRev = new StringBuffer(palCheck);  
+  
+        // Reverse the buffer  
+        wordRev = wordRev.reverse();  
+  
+        // Convert the buffer to a string  
+        return palCheck.equalsIgnoreCase(wordRev.toString());        
+    }    
+    
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("palsquare.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("palsquare.out")));
+        
+        // Declare and initialize variables and read in input
+    	int base = Integer.parseInt(in.readLine());    	
+    	
+    	// For all numbers between 1 and 300
+    	for (int j = 1; j < 301; j++)
+    	{
+    		// Reset variables
+    		String convOrig = Integer.toString(j, base), convSquare = Integer.toString(j * j, base);    		
+    		
+    		// Output the numbers if the square is palindromic
+    		if (isPal(convSquare))
+    		{
+    			convOrig = convOrig.toUpperCase();
+    			convSquare = convSquare.toUpperCase();    		    
+    		    out.println(convOrig + " " + convSquare);
+    		}
+    	}
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
