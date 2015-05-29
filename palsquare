@@ -4,15 +4,6 @@ PROG: palsquare
 LANG: JAVA
 */
 
-//           NAME       :      Brandon Born
-//          GROUP       :      APCS
-//  LAST MODIFIED       :      11-19-14
-//     PROBLEM ID       :      Palindromic Squares
-//    DESCRIPTION       :      For a specified base, outputs all numbers
-//                             less than 301 whose squares are palindromic
-//                             in the specified base.
-//Sources and Helpers   :      USACO, Mr. H, Lewis text, Java API
-
 import java.io.*;
 import java.util.*;
 
