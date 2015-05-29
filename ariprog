@@ -1,0 +1,83 @@
+ /*
+ID: brandon29
+PROG: ariprog
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class ariprog
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("ariprog.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("ariprog.out")));
+        
+        
+        // Declare and initialize variables
+        boolean[] boolBisquares = new boolean[125001];
+        int progLength = Integer.parseInt(in.readLine());
+        int maxBisquare = Integer.parseInt(in.readLine());
+        ArrayList<Integer> bisquares = new ArrayList();
+        boolean isProg = true, oneProg = false;        
+        int counter = 0, largestBisquare = maxBisquare * maxBisquare * 2;
+               
+        // Generate bisquares
+        for (int j = 0; j <= maxBisquare; j++)
+        {
+            for (int k = j; k <= maxBisquare; k++)
+            {
+                bisquares.add(k * k + j * j);                
+            }
+        }
+        
+        // Create bool array of bisquares
+        for (int j = 0; j < bisquares.size(); j++)
+        {
+            boolBisquares[bisquares.get(j)] = true;
+        }
+        
+        // Loop through all possible incrementations
+        for (int j = 1; j <= largestBisquare / (progLength - 1); j++)
+        {
+            // Loop through all possible starting numbers
+            for (int k = 0; k <= largestBisquare - (progLength - 1) * j; k++)
+            {
+                counter = 0;
+                // Loop through term to specified length
+                for (int l = 0; l < progLength; l++)
+                {
+                    // Check if term is a bisquare
+                    if (boolBisquares[k + l * j])
+                    {
+                        counter++;                       
+                    }
+                    
+                    else 
+                    {
+                        break;
+                    }
+                }
+                
+                // Check if all terms worked
+                if (counter == progLength)
+                {
+                    out.println(k + " " + j);
+                    oneProg = true;
+                }
+            }                
+        }        
+        
+        // Check if at least one progression was found
+        if (!oneProg)
+        {
+            out.println("NONE");
+        }
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
