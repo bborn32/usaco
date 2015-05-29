@@ -1,0 +1,78 @@
+/*
+ID: brandon29
+PROG: frac1
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class frac1
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("frac1.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("frac1.out")));
+        
+        // Declare and initialize variables
+        int fracSet = Integer.parseInt(in.readLine());        
+        ArrayList<String> fracStrings = new ArrayList();
+        ArrayList<Double> fracVals = new ArrayList();
+        boolean duplicate;
+        
+        // Generate all reduced fractions of form k / j
+        for (int j = 2; j <= fracSet; j++)
+        {
+            for (int k = 1; k < j; k++)
+            {
+                if (!(j % k == 0 && k !=1))
+                {
+                    duplicate  = false;
+                    for (int i = 0; i < fracVals.size(); i++)
+                    {
+                        if (Math.abs(fracVals.get(i) - (double) k / (double) j) < 0.00001)
+                        {
+                            duplicate = true;
+                            break;
+                        }
+                    }                   
+                    if (!duplicate)
+                    {
+                        fracStrings.add(k + "/" + j);
+                        fracVals.add((double) k / (double) j);
+                    }
+                }
+            }
+        }      
+        
+        // Add 1 and 0 to lists
+        fracVals.add(0.0);
+        fracStrings.add("0/1");
+        fracVals.add(1.0);
+        fracStrings.add("1/1");
+        
+        // Sort lists
+        for (int j = 0; j < fracVals.size() - 1; j++)
+        {            
+            for (int k = 0; k < fracVals.size() - j - 1; k++)
+            {
+                if (fracVals.get(k) > fracVals.get(k + 1))
+                {
+                    Collections.swap(fracVals, k, k + 1);
+                    Collections.swap(fracStrings, k , k + 1);
+                }                
+            }
+        }       
+        
+        // Output sorted fractions
+        for (int j = 0; j < fracStrings.size(); j++)
+        {
+            out.println(fracStrings.get(j));
+        }       
+        
+        //Exit the program
+        out.close();
+        System.exit(0);
+    }
+}
