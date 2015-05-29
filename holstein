@@ -1,0 +1,107 @@
+/*
+ID: brandon29
+PROG: holstein
+LANG: JAVA
+*/
+
+//           NAME       :      Brandon Born
+//          GROUP       :      APCS
+//  LAST MODIFIED       :      December 9, 2014
+//     PROBLEM ID       :      Healthy Holsteins
+//    DESCRIPTION       :      Calculates the minimum number
+//                             of scoops necessary to satisfy 
+//                             a cow's mineral needs. 
+// SOURCES AND HELPERS  :      USACO, Mr. H, Lewis text, Java API
+
+import java.io.*;
+import java.util.*;
+
+public class holstein
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("holstein.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("holstein.out")));
+        
+        // Declare and initialize variables
+        int[] minVitamins = new int[25];
+        int numVitamins;
+        int numFeeds;
+        int[][] feeds = new int[15][25];        
+        numVitamins = Integer.parseInt(in.readLine());
+        String[] inputList = in.readLine().split(" ");        
+        for (int j = 0; j < numVitamins; j++)
+        {
+            minVitamins[j] = Integer.parseInt(inputList[j]);
+        }        
+        numFeeds = Integer.parseInt(in.readLine());
+        for (int j = 0; j < numFeeds; j++)
+        {
+            // Read in feeds
+            String[] splitInput = in.readLine().split(" ");
+            for (int k = 0; k < numVitamins; k++)
+            {                
+                feeds[j][k] = Integer.parseInt(splitInput[k]);
+            }
+        }
+        
+        // Add original possible scoop combos
+        ArrayList<String> states = new ArrayList();
+        for (int j = 1; j <= numFeeds; j++)
+        {
+            states.add("" + j);
+        }
+        
+        // Declare variable
+        boolean found;
+        
+        // Check all scoop combos
+        for (int j = 0; j < states.size(); j++)
+        {
+            // Declare and initialize variables
+            boolean[] checking = new boolean[15];
+            String[] feedsUsed = states.get(j).split(" ");
+            found = true;
+            
+            // Declare array
+            int[] totalVitamins = new int[25];
+            
+            // Find which scoops are being used
+            for (int p = 0; p < feedsUsed.length; p++)
+            {
+                for (int k = 0; k < numVitamins; k++)
+                {
+                    totalVitamins[k] += feeds[Integer.parseInt(feedsUsed[p]) - 1][k];
+                }
+            }            
+        
+            // Check total of all scoops
+            for (int k = 0; k < numVitamins; k++)
+            {
+                if (totalVitamins[k] < minVitamins[k])
+                {
+                    found = false;
+                    break;
+                }
+            }           
+            
+            // Check if answer needs to be outputted
+            if (found)
+            {
+                // Output final answer
+                out.println("" + feedsUsed.length + " " + states.get(j));       
+                                               
+                // Exits the program
+                out.close();
+                System.exit(0);
+            }
+            
+            // Generate next scoop combos
+            for (int k = 1; k < Integer.parseInt(feedsUsed[0]); k++)
+            {
+                states.add(k + " " + states.get(j));
+            }
+        }                                     
+    }
+}
