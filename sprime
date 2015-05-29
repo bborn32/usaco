@@ -1,0 +1,90 @@
+/*
+ID: brandon29
+PROG: sprime
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class sprime
+{ 
+    public static boolean isPrime(int j)
+    {
+        // Check if parameter is even or two
+        if (j == 2)
+        {
+            return true;
+        }
+        
+        if (j % 2== 0)
+        {
+            return false;
+        }
+        
+        // Check possible odd factors
+        for(int i = 3; i * i <= j; i+= 2) 
+        {
+            if(j % i == 0)
+            {
+                return false;
+            }
+        }
+        
+        // Else number is prime
+        return true;
+    }
+    
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("sprime.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("sprime.out")));
+        
+        // Declare and initialize variables
+        int numDigits = Integer.parseInt(in.readLine()), arrayLength, counter = 1;
+        boolean prime = false;
+        int primeDigits[] = {1,3,5,7,9};
+        
+        // Initialize list of superprime numbers
+        ArrayList<Integer> superPrimes = new ArrayList();
+        superPrimes.add(2);
+        superPrimes.add(3);
+        superPrimes.add(5);
+        superPrimes.add(7);
+        
+        // Generate all superprimes with the specified number of digits or less
+        while (counter < numDigits)
+        {           
+            arrayLength = superPrimes.size();            
+            // Add all possible primes to all previous superprimes
+            for (int j = 0; j < arrayLength; j++)
+            {
+                // Check possible prime number additions
+                for (int k = 0; k < 5; k++)
+                {
+                    // Check if new number is still superprime
+                    if (isPrime(10 * superPrimes.get(j) + primeDigits[k]))
+                    {
+                        // Add new superprime number to the array
+                        superPrimes.add(10 * superPrimes.get(j) + primeDigits[k]);                       
+                    }
+                }           
+            }                      
+            counter++;
+        }
+        
+        // Output all superprimes in range
+        for (int j = 0; j < superPrimes.size(); j++)
+        {
+            if (superPrimes.get(j) > Math.pow(10, numDigits - 1))
+            {
+                out.println(superPrimes.get(j));
+            }
+        }     
+               
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
