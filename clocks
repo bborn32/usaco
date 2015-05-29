@@ -4,15 +4,6 @@ PROG: clocks
 LANG: JAVA
 */
 
-//           NAME       :      Brandon Born
-//          GROUP       :      APCS
-//  LAST MODIFIED       :      November 15, 2014
-//     PROBLEM ID       :      The Clocks
-//    DESCRIPTION       :      Calculates the minimum sequence
-//                             of movements necessary to reset a  
-//                             a group of clocks 
-//Sources and Helpers   :      USACO, Mr. H, Lewis text, Java API
-
 import java.io.*;
 import java.util.*;
 
