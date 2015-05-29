@@ -4,15 +4,6 @@ PROG: preface
 LANG: JAVA
 */
 
-//           NAME       :      Brandon Born
-//          GROUP       :      APCS
-//  LAST MODIFIED       :      December 11, 2014
-//     PROBLEM ID       :      Preface Numbering
-//    DESCRIPTION       :      Calculates the amount of each 
-//                             roman numeral needed to tyoe
-//                             a given number of page numbers. 
-// SOURCES AND HELPERS  :      USACO, Mr. H, Lewis text, Java API
-
 import java.io.*;
 import java.util.*;
 
