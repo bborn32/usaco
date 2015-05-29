@@ -1,0 +1,65 @@
+/*
+ID: brandon29
+PROG: friday
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class friday
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("friday.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("friday.out")));       
+        
+        // Initialize and declare variables
+     int monthLength[] = {31,28,31,30,31,30,31,31,30,31,30,31}, counter[] = new int[7], years, dotw;
+     dotw = 1;
+      
+     years = Integer.parseInt(in.readLine());
+     
+     // Calculate the frequency of the thirteenth landing on a certain day each month
+     for (int yr = 1900; yr < 1900 + years; yr++)
+     {
+      // Check if year is a leap year
+         if (yr % 400 == 0  || (yr % 4 == 0 && yr % 100 != 0))
+      {
+       monthLength[1] = 29;
+      }
+      else
+      {
+       monthLength[1] = 28;
+      }
+      
+      // Check each day of each month
+      for (int j = 0; j < 12; j++)
+      {
+       for (int k = 0; k < monthLength[j]; k++)
+       {
+        dotw += 1;
+        dotw %= 7;
+           
+        if (k == 12)
+        {
+         counter[dotw] += 1;
+        } 
+       }
+      }
+     }
+     
+     // Output the results
+     out.print(counter[0]);
+     for (int j = 1; j < 7; j++)
+     {
+      out.print(" " + counter[j]);
+     } 
+     out.println("");   
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
