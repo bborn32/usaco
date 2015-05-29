@@ -1,0 +1,214 @@
+/*
+ID: brandon29
+PROG: clocks
+LANG: JAVA
+*/
+
+//           NAME       :      Brandon Born
+//          GROUP       :      APCS
+//  LAST MODIFIED       :      November 15, 2014
+//     PROBLEM ID       :      The Clocks
+//    DESCRIPTION       :      Calculates the minimum sequence
+//                             of movements necessary to reset a  
+//                             a group of clocks 
+//Sources and Helpers   :      USACO, Mr. H, Lewis text, Java API
+
+import java.io.*;
+import java.util.*;
+
+public class clocks
+{ 
+    static int[][] clocks = new int[3][3];
+    
+    public static boolean finalClockMove(String clockMoves)
+    {
+        // Create array to check with
+        int[][] clockChecker = new int[3][3];
+        
+        // Set new array to original array
+        for (int r = 0; r < 3; r++)
+        {
+            for (int c = 0; c < 3; c++)
+            {
+                clockChecker[r][c] = clocks[r][c];
+            }
+        }
+        
+        // Move clocks as needed
+        for (int j = 0; j < clockMoves.length(); j++)
+        {
+            int moveNum = Integer.parseInt(clockMoves.substring(j, j + 1));            
+            
+            if (moveNum == 1)
+            {
+                clockChecker[0][0]++;
+                clockChecker[1][0]++;
+                clockChecker[0][1]++;
+                clockChecker[1][1]++;
+            }
+            
+            if (moveNum == 2)
+            {
+                clockChecker[0][0]++;
+                clockChecker[0][2]++;
+                clockChecker[0][1]++;
+            }
+            
+            if (moveNum == 3)
+            {
+                clockChecker[1][1]++;
+                clockChecker[0][2]++;
+                clockChecker[0][1]++;
+                clockChecker[1][2]++;
+            }
+            
+            if (moveNum == 4)
+            {
+                clockChecker[0][0]++;
+                clockChecker[1][0]++;
+                clockChecker[2][0]++; 
+            }
+            
+            if (moveNum == 5)
+            {
+                clockChecker[1][1]++;
+                clockChecker[1][0]++;
+                clockChecker[0][1]++;
+                clockChecker[1][2]++;
+                clockChecker[2][1]++;
+            }
+            
+            if (moveNum == 6)
+            {
+                clockChecker[0][2]++;
+                clockChecker[1][2]++;
+                clockChecker[2][2]++;
+            }
+            
+            if (moveNum == 7)
+            {
+                clockChecker[1][0]++;
+                clockChecker[1][1]++;
+                clockChecker[2][0]++;
+                clockChecker[2][1]++;   
+            }
+            
+            if (moveNum == 8)
+            {
+                clockChecker[2][2]++;
+                clockChecker[2][1]++;
+                clockChecker[2][0]++;                 
+            }
+            
+            if (moveNum == 9)
+            {
+                clockChecker[1][1]++;
+                clockChecker[1][2]++;
+                clockChecker[2][1]++;
+                clockChecker[2][2]++; 
+            }            
+        }
+        
+        // Check if move set resets clocks
+        for (int r = 0; r < 3; r++)
+        {
+            for (int c = 0; c < 3; c++)
+            {
+                if (clockChecker[r][c] % 4 != 0)
+                {
+                   return false;
+                }
+            }
+        }        
+        
+        return true;
+    }
+    
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("clocks.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("clocks.out")));
+        
+        // Declare and initialize variables
+        boolean done = false;
+        ArrayList<String> movesUsed = new ArrayList();
+        ArrayList<String> solutions = new ArrayList();
+        String[] ones = new String[] {"", "1", "11", "111"};
+        String[] twos = new String[] {"", "2", "22", "222"};
+        String[] threes = new String[] {"", "3", "33", "333"};
+        String[] fours = new String[] {"", "4", "44", "444"};
+        String[] fives = new String[] {"", "5", "55", "555"};
+        String[] sixes = new String[] {"", "6", "66", "666"};
+        String[] sevens = new String[] {"", "7", "77", "777"};
+        String[] eights = new String[] {"", "8", "88", "888"};
+        String[] nines = new String[] {"", "9", "99", "999"};
+        String checkString = "";
+        
+        // Read in original state of clocks
+        for (int r = 0; r < 3; r++)
+        {
+            String[] splitInput = in.readLine().split(" ");
+            for (int c = 0; c < 3; c++)
+            {
+                clocks[r][c] = Integer.parseInt(splitInput[c]) / 3;
+            }
+        }
+        
+        // Generate all possible move configurations
+        for (int num9 = 0; num9 < 4; num9++)
+        {
+            for (int num8 = 0; num8 < 4; num8++)
+            {
+                for (int num7 = 0; num7 < 4; num7++)
+                {
+                    for (int num6 = 0; num6 < 4; num6++)
+                    {
+                        for (int num5 = 0; num5 < 4; num5++)
+                        {
+                            for (int num4 = 0; num4 < 4; num4++)
+                            {
+                                for (int num3 = 0; num3 < 4; num3++)
+                                {
+                                    for (int num2 = 0; num2 < 4; num2++)
+                                    {
+                                        for (int num1 = 0; num1 < 4; num1++)
+                                        {
+                                            // Generate string for given numbers
+                                            if (!done)
+                                            {
+                                                checkString = ones[num1] + twos[num2] + threes[num3] + fours[num4] + fives[num5] + sixes[num6] + sevens[num7] + eights[num8] + nines[num9];          
+                                            }
+                                            
+                                            // Check if string resets clocks
+                                            if (!done && finalClockMove(checkString))
+                                            {
+                                                done = true;
+                                                break;
+                                            }
+                                        }                                       
+                                    }                                    
+                                }                                
+                            }
+                        }                        
+                    }                    
+                }                
+            }            
+        }        
+        
+        // Format final answer
+        String finalString = "";
+        for (int j = 0; j < checkString.length() - 1; j++)
+        {            
+            finalString += checkString.substring(j, j + 1) + " ";            
+        }
+        finalString += checkString.substring(checkString.length() - 1, checkString.length());
+           
+        // Output final answer
+        out.println(finalString);
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
