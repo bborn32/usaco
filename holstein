@@ -4,15 +4,6 @@ PROG: holstein
 LANG: JAVA
 */
 
-//           NAME       :      Brandon Born
-//          GROUP       :      APCS
-//  LAST MODIFIED       :      December 9, 2014
-//     PROBLEM ID       :      Healthy Holsteins
-//    DESCRIPTION       :      Calculates the minimum number
-//                             of scoops necessary to satisfy 
-//                             a cow's mineral needs. 
-// SOURCES AND HELPERS  :      USACO, Mr. H, Lewis text, Java API
-
 import java.io.*;
 import java.util.*;
 
