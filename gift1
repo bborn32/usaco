@@ -1,0 +1,82 @@
+/*
+ID: brandon29
+PROG: gift1
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class gift1
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("gift1.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("gift1.out")));
+        
+        // Declare and initialize variables
+        int groupNum, amount, numReceivers;
+        String giver, receiver, inputSort;
+        groupNum = Integer.parseInt(in.readLine());
+        List player = new ArrayList();
+        ArrayList<Integer> account = new ArrayList<Integer>();
+        
+        // Read in players an initialize accounts
+        for (int j = 0; j < groupNum; j++)
+        {
+            player.add(in.readLine());
+            account.add(0);
+        }
+        
+        // Calculate results of each gift
+        for (int j = 0; j < groupNum; j++)
+        {
+           // Read in and set variables
+           giver = in.readLine();
+           inputSort = in.readLine();    
+           String[] inputs = inputSort.split("\\s");           
+           amount = Integer.parseInt(inputs[0]);
+           numReceivers = Integer.parseInt(inputs[1]);
+                     
+           // Edit giver's account
+           for (int k = 0; k < player.size(); k++)
+           {
+               if (giver.equals(player.get(k)) && amount > 0)
+               {
+                 account.set(k, account.get(k) + (amount % numReceivers) - amount);
+               }
+           }
+          
+           // Edit receiver's account
+           for (int l = 0; l < numReceivers; l++)
+           {
+               // Read in receiver
+               receiver = in.readLine();
+               
+               // Find receiver
+               if (numReceivers > 0 && amount > 0)
+               {
+                   for (int m = 0; m < groupNum; m++)
+                   {
+                       if (receiver.equals(player.get(m)))
+                       {             
+                           // Add gift to receiver's account
+                           account.set(m, account.get(m) + ((amount - (amount % numReceivers)) / numReceivers));                          
+                       }
+                   }
+               }
+           }
+        }
+        
+        // Output final account values
+        for (int n = 0; n < groupNum; n++)
+        {
+            out.println(player.get(n) + " " + account.get(n));
+        }
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
