@@ -1,0 +1,68 @@
+/*
+ID: brandon29
+PROG: numtri
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class numtri
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("numtri.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("numtri.out")));
+        
+        // Declare and initialize variables
+        int numberTriangle[][] = new int[1000][1000];
+        int sum[][] = new int[1000][1000];
+        int numRows = Integer.parseInt(in.readLine());
+        
+        // Read in number triangle
+        for (int j = 0; j < numRows; j++)
+        {
+            String stringInput = in.readLine();
+            String splitInput[] = stringInput.split(" ");            
+            
+            for (int k = 0; k <= j; k++)
+            {
+               numberTriangle[j][k] = Integer.parseInt(splitInput[k]);               
+            }
+        }
+        
+        // Set bottom row of sums to the number triangle
+        for (int j = 0; j < numRows; j++)
+        {
+            sum[numRows - 1][j] = numberTriangle[numRows - 1][j];
+        }
+        
+        // Run through all rows
+        for (int j = numRows - 2; j >= 0; j--)
+        {
+            // Run through all columns
+            for (int k = numRows - 2; k >= 0; k--)
+            {
+               // Set sum to be numbertriangle plus sum of greater of two lower numbers
+               if (sum[j + 1][k] > sum[j + 1][k + 1])
+               {
+                   sum[j][k] = numberTriangle[j][k] + sum[j + 1][k];
+               }
+               
+               else
+               {
+                   sum[j][k] = numberTriangle[j][k] + sum[j + 1][k + 1];
+               }
+            }
+        }
+        
+        // Output final answer
+        out.println(sum[0][0]);
+        
+               
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
