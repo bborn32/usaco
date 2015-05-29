@@ -1,0 +1,135 @@
+/*
+ID: brandon29
+PROG: namenum
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class namenum
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("namenum.in"));
+        BufferedReader dict = new BufferedReader (new FileReader("dict.txt"));   
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("namenum.out")));
+        
+        // Declare and initialize variables
+        String dictInput, dictNum = "", cowNum = in.readLine();
+        char currDictChar;
+        boolean hasName = false;
+        
+        while ((dictInput = dict.readLine()) != null)
+        {
+            dictNum = "";
+            if (dictInput.length() == cowNum.length())
+            {
+                for (int j = 0; j < cowNum.length(); j++)
+                {
+                    // Create char for current spot in name
+                    currDictChar = dictInput.charAt(j);
+                    
+                    // Add number based on character
+                    switch (currDictChar)
+                    {
+                        // Check for A, B, or C
+                        case 'A':
+                        case 'B':
+                        case 'C':
+                        {
+                            dictNum += "2";                            
+                            break;
+                        }
+                        
+                        // Check for D, E, or F
+                        case 'D':
+                        case 'E':
+                        case 'F':
+                        {
+                            dictNum += "3";
+                            break;
+                        }
+                        
+                        // Check for G, H, or I
+                        case 'G':
+                        case 'H':
+                        case 'I':
+                        {
+                            dictNum += "4";
+                            break;
+                        }
+                        
+                        // Check for J, K, or L
+                        case 'J':
+                        case 'K':
+                        case 'L':
+                        {
+                            dictNum += "5";
+                            break;
+                        }
+                        
+                        // Check for M, N, or O
+                        case 'M':
+                        case 'N':
+                        case 'O':
+                        {
+                            dictNum += "6";
+                            break;
+                        }
+                        
+                        // Check for P, Q, or R
+                        case 'P':
+                        case 'R':
+                        case 'S':
+                        {
+                            dictNum += "7";
+                            break;
+                        }
+                        
+                        // Check for T, U, or V
+                        case 'T':
+                        case 'U':
+                        case 'V':
+                        {
+                            dictNum += "8";
+                            break;
+                        }
+                        
+                        // Check for W, X, or Y
+                        case 'W':
+                        case 'X':
+                        case 'Y':
+                        {
+                            dictNum += "9";
+                            break;
+                        }                        
+                    }            
+                    
+                    if (!(dictNum.equals(cowNum.substring(0, j + 1))))
+                    {
+                        break;
+                    }                   
+                }
+                
+                // Output name if numbers are equal
+                if (dictNum.equals(cowNum))
+                {
+                    out.println(dictInput);
+                    hasName = true;
+                }               
+            }           
+        }
+        
+        // Check if there were any outputs
+        if (!hasName)
+        {
+            out.println("NONE");
+        }
+        
+        //Exit the program
+        out.close();
+        System.exit(0);
+    }
+}
