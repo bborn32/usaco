@@ -1,2 +1,2 @@
 # usaco
-Collection of solved USACO programs, to be continually added to.
+Collection of solved USACO programs, to be continually added to (Hopefully).
