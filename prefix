@@ -1,0 +1,37 @@
+/*
+ID: brandon29
+PROG: prefix
+LANG: JAVA
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class prefix
+{ 
+    static String total = "";
+    
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("prefix.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("prefix.out")));
+        
+        String line, whole = "";
+        
+        while ((line = in.readLine()).equals("."))
+        {
+            whole += line + " ";
+        }
+        String[] prim = whole.substring(0, whole.length() - 1).split(" ");
+        whole = "";
+        while ((line = in.readLine()) != null)
+        {
+            whole += line;
+        }
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
