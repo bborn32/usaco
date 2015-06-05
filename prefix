@@ -10,6 +10,40 @@ import java.util.*;
 public class prefix
 { 
     static String total = "";
+    static int[] values = new int[2000000];
+    static ArrayList<String>[] prim = new ArrayList[26];
+    
+    public static int dyn(int index)
+    {
+        if (total.length() <= index)
+        {
+            return total.length();
+        }
+        
+        if (values[index] != 0)
+        {
+            return values[index];
+        }     
+        
+        ArrayList<Integer> poss = new ArrayList();
+        poss.add(index);
+        for (int j = 0; j < prim[(int) total.charAt(index) - 65].size(); j++)
+        {
+            if (total.length() > index + prim[(int)total.charAt(index) - 65].get(j).length() - 1 && total.substring(index, index + prim[(int)total.charAt(index) - 65].get(j).length()).equals(prim[(int)total.charAt(index) - 65].get(j)))
+            {
+                poss.add(dyn(index + prim[((int)total.charAt(index)) - 65].get(j).length()));
+            }
+        }
+        
+        int maximum = Collections.max(poss);
+        
+        if (total.length() < maximum)
+        {
+            maximum = total.length();
+        }
+        values[index] = maximum;
+        return maximum;
+    }
     
     public static void main (String[] args) throws IOException
     {
@@ -19,17 +53,27 @@ public class prefix
         
         String line, whole = "";
         
-        while ((line = in.readLine()).equals("."))
+        while (!(line = in.readLine()).equals("."))
         {
             whole += line + " ";
         }
-        String[] prim = whole.substring(0, whole.length() - 1).split(" ");
+        String[] primitives = whole.substring(0, whole.length() - 1).split(" ");
         whole = "";
         while ((line = in.readLine()) != null)
         {
             whole += line;
         }
+        total = whole;
+        for (int j = 0; j < 26; j++)
+        {
+            prim[j] = new ArrayList();
+        }
+        for (int j = 0; j < primitives.length; j++)
+        {
+            prim[((int) primitives[j].charAt(0)) - 65].add(primitives[j]);
+        }
         
+        out.println(dyn(0));
         //Exits the program
         out.close();
         System.exit(0);
