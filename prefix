@@ -8,74 +8,51 @@ import java.io.*;
 import java.util.*;
 
 public class prefix
-{ 
-    static String total = "";
-    static int[] values = new int[2000000];
-    static ArrayList<String>[] prim = new ArrayList[26];
-    
-    public static int dyn(int index)
-    {
-        if (total.length() <= index)
-        {
-            return total.length();
-        }
-        
-        if (values[index] != 0)
-        {
-            return values[index];
-        }     
-        
-        ArrayList<Integer> poss = new ArrayList();
-        poss.add(index);
-        for (int j = 0; j < prim[(int) total.charAt(index) - 65].size(); j++)
-        {
-            if (total.length() > index + prim[(int)total.charAt(index) - 65].get(j).length() - 1 && total.substring(index, index + prim[(int)total.charAt(index) - 65].get(j).length()).equals(prim[(int)total.charAt(index) - 65].get(j)))
-            {
-                poss.add(dyn(index + prim[((int)total.charAt(index)) - 65].get(j).length()));
-            }
-        }
-        
-        int maximum = Collections.max(poss);
-        
-        if (total.length() < maximum)
-        {
-            maximum = total.length();
-        }
-        values[index] = maximum;
-        return maximum;
-    }
-    
+{
     public static void main (String[] args) throws IOException
     {
         // Opening files from USACO for input/output
-        BufferedReader in = new BufferedReader (new FileReader("prefix.in"));       
-        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("prefix.out")));
+        BufferedReader in = new BufferedReader (new FileReader("pre.txt"));       
+        //PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("prefix.out")));
         
         String line, whole = "";
-        
+        String total = "";
+        String[] prim;    
+        boolean[] checked = new boolean[200000];
+        int big = 0;
         while (!(line = in.readLine()).equals("."))
         {
             whole += line + " ";
         }
-        String[] primitives = whole.substring(0, whole.length() - 1).split(" ");
+        prim = whole.substring(0, whole.length() - 1).split(" ");
         whole = "";
         while ((line = in.readLine()) != null)
         {
             whole += line;
         }
-        total = whole;
-        for (int j = 0; j < 26; j++)
-        {
-            prim[j] = new ArrayList();
-        }
-        for (int j = 0; j < primitives.length; j++)
-        {
-            prim[((int) primitives[j].charAt(0)) - 65].add(primitives[j]);
-        }
         
-        out.println(dyn(0));
-        //Exits the program
-        out.close();
+        total = whole;
+        Arrays.fill(checked, false);
+        checked[0] = true;        
+        for (int k = 0; k < total.length(); k++)
+        {            
+            /*if (checked[k])
+            {
+                for (int j = 0; j < prim.length; j++)
+                {
+                    if (!checked[k + prim[j].length()] && k + prim[j].length() <= total.length() && prim[j].equals(total.substring(k, k + prim[j].length())))
+                    {
+                        checked[k + prim[j].length()] = true;
+                        big = Math.max(k + prim[j].length(), big);
+                    }
+                }
+            }*/
+        }        
+        
+        System.out.println(big);       
+              
+        // Exits the program
+        ////out.close();
         System.exit(0);
     }
 }
