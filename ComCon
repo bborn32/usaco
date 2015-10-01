@@ -1,0 +1,38 @@
+//    GROUP NAMES       :      Brandon Born, Jack Eichman
+//   CONTEST DATE       :      ComCon April 2009
+//     PROBLEM ID       :      "No Rhyme or Reason"
+//   PROBLEM NUM        :      P4
+
+import java.io.*;
+import java.util.*;
+
+public class ComConApril2009
+{ 
+    public static void main (String[] args) throws IOException
+    {
+        //  Opening files from computer for input/output
+        // BufferedReader in = new BufferedReader (new FileReader("PROGRAM2.DAT"));
+        System.out.println("Brandon Born, Jack Eichman\nDiscrete Math\nComCon April 2009 No Rhyme or Reason P4\n\n");
+        BufferedReader scan = new BufferedReader (new FileReader("README.TXT"));
+        
+        // Runs the program 5 times 
+        for (int j = 0; j < 5; j++)
+        {
+            // Reads in the input
+            int length = Integer.parseInt(scan.readLine());            
+            long[][] diff = new long[21][21];
+            diff[0][0] = 1;
+            diff[1][0] = 1;
+            diff[1][1] = 2;
+            for (int k = 2; k <= 20; k++)
+            {
+                diff[k][0] = diff[k-1][k-1];
+                for (int l = 1; l <= k; l++)
+                {
+                    diff[k][l] = diff[k - 1][l - 1] + diff[k][l-1];                    
+                }                
+            }     
+            System.out.println(length + " "  + diff[length][0]);
+        }        
+    }
+}
