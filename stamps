@@ -1,0 +1,74 @@
+//NAME                  :      Brandon Born 
+//GROUP                 :      Adv CS
+//LAST MODIFIED         :      April 13, 2016
+//PROBLEM ID            :      Stamps
+//DESCRIPTION           :      Given a set of N stamp values (e.g., {1 cent, 3 cents}) and 
+//                             an upper limit K to the number of stamps that can
+//                             fit on an envelope, calculate the largest unbroken list 
+//                             of postages from 1 cent to M cents that can be created.                          
+//Sources and Helpers   :      Mr. Houtrouw, Java API, McOrwin
+
+import java.io.*;
+import java.util.*;
+
+public class stamps
+{ 
+    static int numStamps, numVals;
+    static int[] stamps = new int[51];
+    static int[] stampsToMake = new int[100001];
+    static boolean[] makePostage = new boolean[100001];
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("stamps.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("stamps.out")));        
+        
+        // Declare and initialize variables
+        String[] in1 = in.readLine().split(" ");
+        numStamps = Integer.parseInt(in1[0]);
+        numVals = Integer.parseInt(in1[1]);
+        int[] stamps = new int[51];       
+        Arrays.fill(makePostage, false);
+        Arrays.fill(stampsToMake, 10000);
+        for (int j = 0; j < numVals; j+= 15)
+        {
+            String[] in2 = in.readLine().split(" ");
+            for (int k = 0; k < in2.length; k++)
+            {
+                stamps[15 * j + k] = Integer.parseInt(in2[k]);
+                makePostage[Integer.parseInt(in2[k])] = true;
+                stampsToMake[Integer.parseInt(in2[k])] = 1;
+            }
+        }
+        Arrays.sort(stamps);
+        boolean canMakePostage = true;
+        int count = 1;
+        
+        while (canMakePostage)
+        {            
+            if (makePostage[count])
+            {
+                count++;
+            }
+            else
+            {                
+                for (int j = 1; j < (count + 2) / 2; j++)
+                {                    
+                    if (/*makePostage[j] && makePostage[count - j] && */(stampsToMake[j] + stampsToMake[count - j] <= numStamps))
+                    {
+                        makePostage[count] = true;
+                        stampsToMake[count] = Math.min(stampsToMake[count], stampsToMake[j] + stampsToMake[count - j]);
+                    }
+                }                
+                canMakePostage = makePostage[count];
+                count++;
+            }
+        }
+        count -=2;
+        out.println(count);
+        
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
