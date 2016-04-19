@@ -1,0 +1,76 @@
+import java.io.*;
+import java.util.*;
+
+public class hamming
+{ 
+    public static int hamDist(int a, int b) 
+    {
+        int d = 0;
+        String A = Integer.toBinaryString(a), B = Integer.toBinaryString(b);
+        if (A.length() > B.length()) 
+        {
+            while (A.length() > B.length()) 
+            {
+                B = "0" + B;
+            }
+        } 
+        else if (A.length() < B.length())
+        {
+            while (A.length() < B.length()) 
+            {
+                A = "0" + A;
+            }
+        }
+        for (int i = 0; i < A.length(); i++) 
+        {
+            if (A.charAt(i) != B.charAt(i))
+                d++;
+        }
+        return d;
+    }
+    public static void main (String[] args) throws IOException
+    {
+        // Opening files from USACO for input/output
+        BufferedReader in = new BufferedReader (new FileReader("hamming.in"));       
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("hamming.out")));
+        String splitInput[] = in.readLine().split(" ");
+        int numCodewords = Integer.parseInt(splitInput[0]);
+        int bitLength = Integer.parseInt(splitInput[1]);
+        int hamDist = Integer.parseInt(splitInput[2]);
+        int maxCheckNum = (int) Math.pow(2,bitLength);
+        ArrayList<Integer> codeWords = new ArrayList();
+        for (int j = 0; j < maxCheckNum; j++)
+        {
+            if (j == 0)
+            {
+                codeWords.add(j);
+            }
+            else 
+            {
+                boolean hamCode = true;
+                for (int k = 0; k < codeWords.size(); k++)
+                {
+                    if (hamDist(codeWords.get(k), j) < hamDist)
+                        hamCode = false;                    
+                }
+                if (hamCode)
+                    codeWords.add(j);                
+            }
+            if (codeWords.size() == numCodewords)
+                break;
+        }   
+        for (int j = 1; j <= codeWords.size(); j++)
+        {
+            if ((j - 1) % 10 == 0)
+                out.print(codeWords.get(j - 1));
+            else if (j % 10 == 0 || j == codeWords.size())
+                out.println(" " + codeWords.get(j - 1));
+            else
+                out.print(" " + codeWords.get(j - 1));                
+        }
+               
+        //Exits the program
+        out.close();
+        System.exit(0);
+    }
+}
