@@ -1,6 +1,4 @@
-//NAME                  :      Brandon Born 
-//GROUP                 :      Adv CS
-//LAST MODIFIED         :      April 13, 2016
+//LAST MODIFIED         :      April 19, 2016
 //PROBLEM ID            :      Stamps
 //DESCRIPTION           :      Given a set of N stamp values (e.g., {1 cent, 3 cents}) and 
 //                             an upper limit K to the number of stamps that can
@@ -11,12 +9,11 @@
 import java.io.*;
 import java.util.*;
 
+
 public class stamps
 { 
     static int numStamps, numVals;
-    static int[] stamps = new int[51];
-    static int[] stampsToMake = new int[100001];
-    static boolean[] makePostage = new boolean[100001];
+    static int[] stamps = new int[51];    
     public static void main (String[] args) throws IOException
     {
         // Opening files from USACO for input/output
@@ -28,44 +25,46 @@ public class stamps
         numStamps = Integer.parseInt(in1[0]);
         numVals = Integer.parseInt(in1[1]);
         int[] stamps = new int[51];       
-        Arrays.fill(makePostage, false);
-        Arrays.fill(stampsToMake, 10000);
+        
+        // Red in and sort stamps 
         for (int j = 0; j < numVals; j+= 15)
         {
             String[] in2 = in.readLine().split(" ");
             for (int k = 0; k < in2.length; k++)
             {
-                stamps[15 * j + k] = Integer.parseInt(in2[k]);
-                makePostage[Integer.parseInt(in2[k])] = true;
-                stampsToMake[Integer.parseInt(in2[k])] = 1;
+                stamps[j + k] = Integer.parseInt(in2[k]);                
             }
         }
-        Arrays.sort(stamps);
-        boolean canMakePostage = true;
-        int count = 1;
+        Arrays.sort(stamps);    
         
-        while (canMakePostage)
-        {            
-            if (makePostage[count])
+        // Declare and initalize more variables
+        int maxCount = stamps[stamps.length - 1] * numStamps;
+        int[] postage = new int[maxCount + 1];
+        Arrays.fill(postage, maxCount + 1);
+        int j;
+        postage[0] = 0;
+        
+        // Increment up until maximum value
+        for (j = 1; j <= maxCount; j++)
+        {
+            // Check each stamp to see if it will work
+            for (int k = 0; k < stamps.length; k++)
             {
-                count++;
-            }
-            else
-            {                
-                for (int j = 1; j < (count + 2) / 2; j++)
-                {                    
-                    if (/*makePostage[j] && makePostage[count - j] && */(stampsToMake[j] + stampsToMake[count - j] <= numStamps))
-                    {
-                        makePostage[count] = true;
-                        stampsToMake[count] = Math.min(stampsToMake[count], stampsToMake[j] + stampsToMake[count - j]);
-                    }
+                // Check if stamp is within possible range for this value
+                if (j - stamps[k] >= 0)
+                {
+                    // Check is using this stamp is minimal
+                    postage[j] = Math.min(postage[j - stamps[k]] + 1, postage[j]);
                 }                
-                canMakePostage = makePostage[count];
-                count++;
+            }
+            
+            // Check is postage value is now valid
+            if (postage[j] > numStamps)
+            {                
+                break;                
             }
         }
-        count -=2;
-        out.println(count);
+        out.println(j - 1);        
         
         //Exits the program
         out.close();
